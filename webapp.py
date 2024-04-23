@@ -1,3 +1,4 @@
+import base64
 import streamlit as st
 from streamlit import pyplot as plt
 from streamlit_pdf_viewer import pdf_viewer
@@ -17,10 +18,29 @@ agent_worker = FunctionCallingAgentWorker.from_tools(
 )
 agent = AgentRunner(agent_worker)
 
+def display_pdf(file):
+    # Opening file from file path
+
+    st.markdown("### PDF Preview")
+    base64_pdf = base64.b64encode(file.read()).decode("utf-8")
+
+    # Embedding PDF in HTML
+    pdf_display = f"""<iframe src="data:application/pdf;base64,{base64_pdf}" width="100" height="50%" type="application/pdf"
+                        style="height:50vh; width:50%"
+                    >
+                    </iframe>"""
+
+    # Displaying File
+    st.markdown(pdf_display, unsafe_allow_html=True)
+
 # ---------------------------------------------------------------------------- #
 # ---------------------------------------------------------------------------- #
 # Streamlit user interface setup
-st.set_page_config(layout="wide")
+st.set_page_config(
+    page_title="CQA Tool",
+    page_icon=":toolbox:",
+    layout="wide"
+)
 
 st.markdown("""
 <style>
@@ -32,21 +52,37 @@ iframe {
 </style>
 """, unsafe_allow_html=True)
 
-st.title('Chart Question Answering')
+st.title('📊 Chart Question Answering')
+
+# add PDFs by uploading in the sidebar
+with st.sidebar:
+    st.markdown("### Upload PDF :page_facing_up:")
+    uploaded_file = st.file_uploader("Choose a PDF file", type=['pdf'])
+    # add status indicator
+    if uploaded_file:
+        st.markdown("### Status :hourglass_flowing_sand:")
+        st.success("Ready to answer questions")
+        # st.balloons()
 
 # Here, switch the order of col1 and col2 to reverse the panes
-col2, col1 = st.columns(2)  # Adjusted the order here
-# col1.markdown("###     CQA Tool Instruction will be displayed here") 
-# col1.image(Image.open("./img/tool_function_overview.png").resize((int(0.8 * Image.open("./img/tool_function_overview.png").width), int(0.8 * Image.open("./img/tool_function_overview.png").height))))
-col1.image(Image.open("./img/inflationreport.png").resize((int(.8 * Image.open("./img/tool_function_overview.png").width), int(1.8 * Image.open("./img/tool_function_overview.png").height))))
-col1.markdown("###     CQA Tool Instruction will be displayed here")
-col1.markdown("#### Pipeline Overview")
-col1.markdown("1. Upload a PDF file")
-col1.markdown("2. Ask a question about the content of the PDF file")    
-col1.markdown("3. The tool will generate a response to your question")
+col1, col2 = st.columns(2)  # Adjusted the order here
+# Display PDF
+if uploaded_file:
+    with col2.expander("📈 PDF Preview"):
+        display_pdf(uploaded_file)
+col2.markdown("###     CQA Tool Framework")
+col2.image(Image.open("./img/draft_pipeline.png"))
+col2.markdown("###     CQA Tool Instructions")
+col2.markdown("1️⃣ Upload a PDF file")
+col2.markdown("2️⃣ Ask a question about the content of the PDF file")    
+col2.markdown("3️⃣ The tool will generate a response to your question")
 
+with col2.expander(":warning:  Finding and Limitations "):
+    st.markdown("1️⃣ The tool is designed to answer questions about the content of the PDF file")
+    st.markdown("2️⃣ The tool may not be able to answer all questions")
+    st.markdown("3️⃣ The tool may not be able to answer questions that require external knowledge")
+    st.markdown("4️⃣ The tool may not be able to answer questions that require complex reasoning")
 
-col2.button("Upload PDF file")
 
 # # Initialize variables to store PDF data
 # if 'text_data' not in st.session_state or 'chart_data' not in st.session_state:
@@ -66,9 +102,9 @@ def display_conversation_history():
         st.session_state['response_history'] = []
 
     for i in range(len(st.session_state['conversation'])):
-        col2.write(f"User: {st.session_state['conversation'][i]}")
+        col1.write(f"User: {st.session_state['conversation'][i]}")
         if i < len(st.session_state['response_history']):
-            col2.write(f"{st.session_state['response_history'][i]}")
+            col1.write(f"{st.session_state['response_history'][i]}")
 
         # Additionally check for image responses and display them
         if i < len(st.session_state['response_history']) and isinstance(st.session_state['response_history'][i], str) and st.session_state['response_history'][i].endswith('.png'):
@@ -109,8 +145,8 @@ if 'current_message' not in st.session_state:
 # display_conversation_history()
 
 # Input and send buttons are defined after displaying the images
-message_input = col2.text_input("Enter your message here", key='current_message')
-send_button = col2.button("Send", on_click=send_message)
+message_input = col1.text_input("Enter your message here", key='current_message')
+send_button = col1.button("Send", on_click=send_message)
 
 if send_button:
     st.rerun()
