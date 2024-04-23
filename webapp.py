@@ -39,8 +39,14 @@ col2, col1 = st.columns(2)  # Adjusted the order here
 # col1.markdown("###     CQA Tool Instruction will be displayed here") 
 # col1.image(Image.open("./img/tool_function_overview.png").resize((int(0.8 * Image.open("./img/tool_function_overview.png").width), int(0.8 * Image.open("./img/tool_function_overview.png").height))))
 col1.image(Image.open("./img/inflationreport.png").resize((int(.8 * Image.open("./img/tool_function_overview.png").width), int(1.8 * Image.open("./img/tool_function_overview.png").height))))
+col1.markdown("###     CQA Tool Instruction will be displayed here")
+col1.markdown("#### Pipeline Overview")
+col1.markdown("1. Upload a PDF file")
+col1.markdown("2. Ask a question about the content of the PDF file")    
+col1.markdown("3. The tool will generate a response to your question")
 
-col2.markdown("### Chat, inquire, and modify the chart")
+
+col2.button("Upload PDF file")
 
 # # Initialize variables to store PDF data
 # if 'text_data' not in st.session_state or 'chart_data' not in st.session_state:
