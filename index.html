@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plant Disease Detection and Diagnosis using AI and Machine Learning</title>
+<style>
+  body { font-family: Arial, sans-serif; }
+  .menu { overflow: hidden; background-color: #37683b; }
+  .menu a { float: left; display: block; color: white; text-align: center; padding: 14px 20px; text-decoration: none; }
+  .dropdown { float: left; overflow: hidden; }
+  .dropdown .dropbtn { font-size: 16px; border: none; outline: none; color: white; padding: 14px 20px; background-color: inherit; font-family: inherit; margin: 0; cursor: pointer; }
+  .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; }
+  .dropdown-content a { float: none; color: black; padding: 12px 16px; text-decoration: none; display: block; text-align: left; cursor: pointer; }
+  .dropdown-content a:hover { background-color: #ddd; }
+  .dropdown:hover .dropdown-content { display: block; }
+  .content-section { display: none; }
+  .team-member { margin: 20px; text-align: center; }
+  .team-member img { width: 100px; height: auto; border-radius: 50%; }
+  .team-member p { margin-top: 5px; }
+
+  
+  .sub-section { margin-left: 20px; }
+  .sub-section h3 { font-size: 16px; }
+  .sub-section p, .sub-section ul { font-size: 14px; }
+</style>
+
+</style>
+<script>
+function toggleSection(sectionId) {
+    var sections = document.querySelectorAll('.content-section');
+    sections.forEach(function(sec) {
+        sec.style.display = 'none';
+    });
+
+    var selectedSection = document.getElementById(sectionId);
+    if (selectedSection) {
+        selectedSection.style.display = 'block';
+    }
+}
+</script>
+</head>
+<body>
+
+<div class="menu">
+  <a href="#home" onclick="toggleSection('homeSection')">Home</a>
+  <a href="javascript:void(0);" onclick="toggleSection('teamSection')">Meet the Team</a>
+  <div class="dropdown">
+    <button class="dropbtn" onclick="toggleSection('')">Project Details
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content">
+      <a href="javascript:void(0);" onclick="toggleSection('motivationSection')">Motivation</a>
+      <a href="javascript:void(0);" onclick="toggleSection('timelineSection')">Background</a>
+      <a href="javascript:void(0);" onclick="toggleSection('detailsSection')">Existing Applications</a>
+      <a href="javascript:void(0);" onclick="toggleSection('detailsSection2')">Our Contribution</a>
+      <a href="javascript:void(0);" onclick="toggleSection('motivationSection2')">Methodology</a>
+      <a href="javascript:void(0);" onclick="toggleSection('timelineSection2')">Results and Discussions</a>
+      <a href="javascript:void(0);" onclick="toggleSection('detailsSection3')">Turorials, Guides, and Repository</a>
+
+    </div>
+  </div> 
+</div>
+
+<div id="homeSection" class="content-section" style="display:block;">
+  <h1>ML Group Project</h1>
+  <p>Our project will develop an open-source web application that leverages advanced Convolutional Neural Networks to provide accurate and 
+    efficient plant disease detection and diagnosis, facilitating agricultural productivity, and serving as an educational tool for technology and agriculture enthusiasts.</p>
+</div>
+
+<div id="teamSection" class="content-section">
+  <h2>Our Team</h2>
+  <div class="team-member">
+    <img src="img/ChadHucey.png" alt="Leonardo">
+    <p>Hi, I’m Chad and I’m originally from Kingston, Jamaica. I studied Mechanical Engineering as an undergrad at WPI and then transitioned to Data Science. I really like to watch soccer and Formula 1 - I’m an avid fan of both sports. 
+      I would really like to see a live formula 1 event in the future.	</p>
+  </div>
+  <div class="team-member">
+    <img src="img/Dan_Headshot.jpg" alt="Michelangelo">
+    <p>Dan Fox is enrolled in a Master of Science in Data Science program at Worcester Polytechnic Institute and expects to get his degree in December 2024. He has 22 years of previous experience in software engineering development, focused largely on network-based embedded software. 
+      He received his undergraduate degree from the Massachusetts Institute of Technology.</p>
+  </div>
+  <div class="team-member">
+    <img src="img/IvanLim.jpg" alt="Donatello">
+    <p>Ivan Lim is currently pursuing a PhD in Data Science in Worcester Polytechnic Institute. Specifically, he focuses on the growing prevalence of online learning platforms within the educational sector and teachers' use of these platforms. 
+      His research aims to analyze teachers' digital pedagogy, utilizing digital footprints or log files from these platforms, to understand their impact on student learning outcomes. </p>
+  </div>
+  <div class="team-member">
+    <img src="img/raphael.jpg" alt="Raphael">
+    <p>Raphael - The passionate and fierce member. Brings intensity and strength to the team.</p>
+  </div>
+  <div class="team-member">
+    <img src="img/splinter.jpg" alt="Splinter">
+    <p>Splinter - The mentor. Guides the team with wisdom and provides invaluable advice.</p>
+  </div>
+</div>
+
+<!Sections for Project Details>
+<div id="motivationSection" class="content-section">
+  <h2>Motivation</h2>
+  <p>Research into the domain of plant disease detection using 
+    computer vision capabilities has piqued the interest of 
+    researchers from both the academic and industrial
+    sides alike. We are growing accustomed to having various
+    machine-learning applications that help us with difficult
+    tasks, such as plant disease identification with varied levels
+    of accuracy and usability.</p>
+    <p>Many disease prediction efforts rely solely on examining
+       images of plant leaves. However, there is an increasing
+        demand for not only classifying diseases but also plant 
+        species. A multi dimensional classification solution would
+         be much more attractive, especially for large-scale crop 
+         management.  </p>
+    <p> This project is driven by
+    the potential of convolutional neural networks (CNNs) to
+    significantly advance the identification process of plant
+    ailments with a higher accuracy and efficiency that were
+    previously unattainable.</p>
+    <p> Our thesis explores advanced
+    disease identification methods in plants through an active
+    literature review and translating these techniques into a
+    practical, user-friendly tool. We aim to expand on an
+    existing researchers’ codebase to develop an open-source
+    web application that can serve both as a sophisticated
+    plant disease detection system and as an educational plat-
+    form for future developers and researchers in the field.
+    In this experiment, we make the following contribu-
+    tions:</p>
+    <ul>
+      <li>Tool Function: Our tool leverages ML and deep-
+        learning algorithms to accurately classify plant dis-
+        ease from images that can be used for diagnosis and
+        remediation suggestions.</li><br/>
+        <li>
+          Impact: Our tool will be a step forward in improv-
+          ing global agriculture efforts, informing hobbyists,
+          and inspiring aspiring researchers through access to
+          a web platform that can be used as a product or boil-
+          erplate code repository to develop the tool further.
+        </li>
+      </ul>
+      
+    
+</div>
+<div id="timelineSection" class="content-section">
+  <h2>Background</h2>
+  <p> [4] reviewed current deep learning methods for 
+    identifying plant species and detecting diseases from leaf images.
+     The review highlighted four key strategies:</p>
+     <ul>
+      <li>
+        multi-model: Use two CNN (Convolutional Neural Network) models on leaf 
+        images, with one model identifying plant species and the other
+        diagnosing leaf diseases.</li><br/>
+        <li>
+          multi-label: Employ a single CNN model to generate multiple labels 
+          simultaneously, unlike traditional multi-label learning. 
+          This strategy merges labels into a combined power-set label 
+          for both training and identification purposes.
+        </li><br/>
+        <li>
+          multi-output: Use a single CNN model, similar to the
+           multi-label strategy. However, it differs by having 
+           separate output layers for each classification target.
+        </li><br/>
+        <li>
+          Adopt a multi-task learning framework that targets 
+          different objectives using data from the same dataset.
+        </li>      
+     </ul>
+     <p>Building on these methods, the authors introduced a novel 
+      technique named Generalised Stacking Multi-output CNNs (GSMo-CNN).
+      This method combines some strengths of the aforementioned
+      approaches to enhance performance by creating a sequence of output 
+      layers. This sequential structure forms a hierarchical 
+      classification system aimed at accurately representing the 
+      relationship between various plant species and their diseases 
+      during analysis.</p> 
+      <p>
+        Furthermore, the study explored the effectiveness of 
+        different CNN architectures (e.g., AlexNet, VGG16, InceptionV3) 
+        across all four strategies by testing them on three well-known 
+        plant disease image datasets: 
+        <ul>
+          <li>
+            Plant Village [2]
+          </li><br/>
+          <li>
+            Plant Leaves [1] and,
+          </li><br/>
+          <li>
+            Plant Doc [3]
+          </li>
+        </ul> InceptionV3 emerged as the superior CNN architecture 
+        for identifying plant species and predicting diseases.
+      </p>
+      
+  <div><h2>References:</h2>
+    <ol>
+      <li>S. S. Chouhan. A Database of Leaf Images: Prac-
+    tice towards Plant Conservation with Plant Pathology,
+    June 2019.</li> <br/>
+    <li> D. P. Hughes and M. Salathe. An open access repos-
+      itory of images on plant health to enable the de-
+      velopment of mobile disease diagnostics, Apr. 2016.
+      arXiv:1511.08060 [cs].</li><br/>
+    <li> D. Singh, N. Jain, P. Jain, P. Kayal, S. Kumawat, and
+      N. Batra. PlantDoc: A Dataset for Visual Plant Dis-
+      ease Detection. In Proceedings of the 7th ACM IKDD
+      CoDS and 25th COMAD, pages 249–253, Hyderabad
+      India, Jan. 2020. ACM.</li>  <br/>
+      <li>J. Yao, S. N. Tran, S. Garg, and S. Sawyer. Deep
+        learning for plant identification and disease classifica-
+        tion from leaf images: Multi-prediction approaches.
+        ACM Comput. Surv., jan 2024. Just Accepted.
+        Page 3</li>  </ol>   
+    
+    </div>
+</div>
+<div id="detailsSection" class="content-section">
+  <h2>Existing Technologies</h2>
+  <p>There are several commercially available apps
+     that can identify infected plants. Some of these apps include:
+     <ul>
+      <li>
+        “PlantSaver – Plants Identifier”
+      </li><br/>
+      <li>
+        “Agrio” and
+      </li><br/>
+      <li>
+        “Plant Disease Identifier”
+      </li><br/>
+     </ul>         
+      All apps are all available on the Apple App Store. 
+      Each app allows the user to take a picture of a plant, 
+      and the app will determine whether or not the plant is 
+      healthy. It is important to note that each app requires 
+      a monthly subscription for uninterrupted usage. 
+      Additionally, “Agrio” is the only service that offers 
+      a web-based application, which requires a monthly 
+      subscription. </p>
+     
+</div>
+</div>
+<div id="detailsSection2" class="content-section">
+  <h2>Our Contribution</h2>
+  <p>
+    For this project, this team will develop a 
+    free-to-use guide for beginners to the field of 
+    Machine Learning who want to create their own Plant Disease 
+    Classifier. This team will outline the steps involved, 
+    including preprocessing techniques, model architectures, and evaluation metrics needed to create a robust model.
+  </p>
+  <h2>Impact</h2>
+  <p>
+    The impact of this project lies in its ability to serve as a guide for future works. Future researchers can use this project as a reference and a starting point for their research. 
+  </p>
+  <p>
+    A guide for plant disease classification can serve as an invaluable resource for a beginner in the field of machine learning by offering a comprehensive overview of both the practical application of machine learning techniques and the domain-specific challenges involved in diagnosing plant health. For novices, such a guide demystifies the process of applying machine learning algorithms to real-world problems, providing a concrete example of how data can be collected, processed, and used to make predictions or decisions—in this case, identifying various plant diseases based on symptoms presented in images or data sets. 
+  </p>
+  <p>
+     Furthermore, it introduces beginners to the interdisciplinary nature of applied machine learning, blending computer science with botany and plant pathology, thereby broadening their understanding and appreciation of the field. By tackling a specific task like plant disease classification, beginners can gain hands-on experience with data preprocessing, feature extraction, model selection, and evaluation metrics, all of which are foundational skills in machine learning. Additionally, such a guide can highlight the importance of domain expertise in developing effective machine learning solutions, showing how collaboration between machine learning practitioners and subject matter experts can lead to more accurate and meaningful outcomes.
+
+  </p>
+
+
+</div>
+<!Sections for Project Details - Second Set>
+<div id="motivationSection2" class="content-section">
+  <h2>Methodology</h2>
+  <p>This section details the motivation and background for our project...</p>
+</div>
+<div id="timelineSection2" class="content-section">
+  <h2>results and Discussion</h2>
+  <p>This section outlines the timeline of our project...</p>
+</div>
+<div id="detailsSection3" class="content-section">
+  <h2>Tutorials and How to guide</h2>
+  <p>This section provides more detailed information about our project...</p>
+</div>
+<div style="height:2000px"></div> 
+
+<script>
+// Ensure the team section is hidden on page load
+document.querySelectorAll('.content-section').forEach(function(section) {
+  section.style.display = 'none';
+});
+document.getElementById('homeSection').style.display = 'block'; // Show the home section by default
+</script>
+
+</body>
+</html>
