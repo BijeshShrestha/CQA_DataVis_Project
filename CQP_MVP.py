@@ -128,7 +128,9 @@ line_chart_tool = FunctionTool.from_defaults(
     name="line_chart_creator",
     description="Generates a dynamic line chart based on provided data and parameters."
 )
-
+#--------------------------------------------------------------------
+pdf_file = "./test_files/final.pdf"
+#2a
 def generate_chart_data_from_pdf(pdf_file):
     print("Running inkscape to generate SVG...")
 
@@ -141,20 +143,26 @@ def generate_chart_data_from_pdf(pdf_file):
 
     return generate_chart_data_from_svg(output_svg_name)
 
-def generate_pdf_from_svg(svg_file):
-    print("Running inkscape to generate PDF...")
+########################################################################################
+#Below is for a pipleline if we pass just the svg data [eg a file with text, and a file with chart svg data]
 
-    output_pdf_name = svg_file + ".pdf"
-    completed = subprocess.run(["inkscape", "--export-filename=" + output_pdf_name, svg_file])
-    print(completed.stdout)
-    print(completed.stderr)
+# def generate_pdf_from_svg(svg_file):
+#     print("Running inkscape to generate PDF...")
 
-    print("PDF generated!")
+#     output_pdf_name = svg_file + ".pdf"
+#     completed = subprocess.run(["inkscape", "--export-filename=" + output_pdf_name, svg_file])
+#     print(completed.stdout)
+#     print(completed.stderr)
 
-    return output_pdf_name
-    
-def generate_chart_data_from_svg(svg_file):
-    svg_file = open(svg_file)
+#     print("PDF generated!")
+
+#     return output_pdf_name
+##############################################################################################
+
+
+#2b 
+def generate_chart_data_from_svg(svg_file_name):
+    svg_file = open(svg_file_name)
 
     line_buffer = ""
     for line in svg_file:
@@ -186,13 +194,16 @@ def generate_chart_data_from_svg(svg_file):
 
     print(response)
 
-    with open(svg_file + "chart_description.txt", "w") as f:
+    with open(svg_file_name + "chart_description.txt", "w") as f:
         f.write(response)
         print(f"{response}")
-        return svg_file + "chart_description.txt"
+        return svg_file_name + "chart_description.txt"
     
+# ================================================================================
+# Process the input pdf and extracted svg data and prepare it for vectorstore 
 
 def pdf_processing(pdf_file):
+    
     text_docs = SimpleDirectoryReader(
         input_files=[pdf_file]
     ).load_data()
@@ -205,19 +216,22 @@ def pdf_processing(pdf_file):
 
     return text_docs, chart_docs
 
-def svg_processing(svg_file):
-    pdf_file = generate_pdf_from_svg(svg_file)
-    text_docs = SimpleDirectoryReader(
-        input_files=[pdf_file]
-    ).load_data()
+######################################################################################
+# If we gave a pure svg this will be called. 
+# def svg_processing(svg_file):
+#     # pdf_file = generate_pdf_from_svg(svg_file)
+#     # text_docs = SimpleDirectoryReader(
+#     #     input_files=[pdf_file]
+#     # ).load_data()
 
-    output_text = generate_chart_data_from_svg(svg_file)
+#     output_text = generate_chart_data_from_svg(svg_file)
 
-    chart_docs = SimpleDirectoryReader(
-        input_files=[output_text]
-    ).load_data()
+#     chart_docs = SimpleDirectoryReader(
+#         input_files=[output_text]
+#     ).load_data()
 
-    return text_docs, chart_docs
+#     return text_docs, chart_docs
+######################################################################################
 
 
 try:
@@ -237,12 +251,19 @@ except:
 
 if not index_loaded:
     # load data
-    text_docs = SimpleDirectoryReader(
-        input_files=["./test_files/inflation2024_report.pdf"]
-    ).load_data()
+    # text_docs, chart_docs = pdf_processing(pdf_file)
+    text_docs, chart_docs_dontuse = pdf_processing(pdf_file)
+
     chart_docs = SimpleDirectoryReader(
-        input_files=["./test_files/inflation2024_data_chart.pdf"]
-    ).load_data()
+        input_files=["./test_files/Inflation2024_data_chart.pdf"]
+        ).load_data()
+
+    # text_docs = SimpleDirectoryReader(
+    #     input_files=["./test_files/Inflation2024_report.pdf"]
+    # ).load_data()
+    # chart_docs = SimpleDirectoryReader(
+    #     input_files=["./test_files/Inflation2024_data_chart.pdf"]
+    # ).load_data()
 
     # build index
     text_index = VectorStoreIndex.from_documents(text_docs)
@@ -250,7 +271,7 @@ if not index_loaded:
 
     # persist index
     text_index.storage_context.persist(persist_dir="./test_files/textdata")
-    chart_index.storage_context.persist(persist_dir="./test_files/textdata")
+    chart_index.storage_context.persist(persist_dir="./test_files/chartdata")
 
 text_engine = text_index.as_query_engine(similarity_top_k=3)
 chart_engine = chart_index.as_query_engine(similarity_top_k=3)
