@@ -238,10 +238,10 @@ except:
 if not index_loaded:
     # load data
     text_docs = SimpleDirectoryReader(
-        input_files=["./test_files/Inflation2024_report.pdf"]
+        input_files=["./test_files/inflation2024_report.pdf"]
     ).load_data()
     chart_docs = SimpleDirectoryReader(
-        input_files=["./test_files/Inflation2024_data_chart.pdf"]
+        input_files=["./test_files/inflation2024_data_chart.pdf"]
     ).load_data()
 
     # build index
