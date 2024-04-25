@@ -129,19 +129,21 @@ line_chart_tool = FunctionTool.from_defaults(
     description="Generates a dynamic line chart based on provided data and parameters."
 )
 #--------------------------------------------------------------------
-pdf_file = "./test_files/final.pdf"
+#pdf_file = "./test_files/final.pdf"
 #2a
 def generate_chart_data_from_pdf(pdf_file):
     print("Running inkscape to generate SVG...")
 
-    output_svg_name = pdf_file + ".svg"
-    completed = subprocess.run(["inkscape", "--export-filename=" + output_svg_name, pdf_file])
-    print(completed.stdout)
-    print(completed.stderr)
+    return "./test_files/empty.txt"
 
-    print("SVG generated!")
+    # output_svg_name = pdf_file + ".svg"
+    # completed = subprocess.run(["inkscape", "--export-filename=" + output_svg_name, pdf_file])
+    # print(completed.stdout)
+    # print(completed.stderr)
 
-    return generate_chart_data_from_svg(output_svg_name)
+    # print("SVG generated!")
+
+    # return generate_chart_data_from_svg(output_svg_name)
 
 ########################################################################################
 #Below is for a pipleline if we pass just the svg data [eg a file with text, and a file with chart svg data]
@@ -182,7 +184,7 @@ def generate_chart_data_from_svg(svg_file_name):
     load_dotenv()
     openai.api_key = os.getenv("OPENAI_API_KEY")
     response = openai.chat.completions.create(
-        model="gpt-4-turbo",
+        model="gpt-3.5-turbo",
         messages=[
                 {"role": "system", "content": prompt},
                 {"role": "user", "content": line_buffer}
@@ -233,89 +235,106 @@ def pdf_processing(pdf_file):
 #     return text_docs, chart_docs
 ######################################################################################
 
+agent = None
+obj_index = None
 
-try:
-    storage_context = StorageContext.from_defaults(
-        persist_dir="./test_files/textdata"
-    )
-    text_index = load_index_from_storage(storage_context)
+def upload_pdf(pdf_file_path):
+    global agent
+    global obj_index
+    try:
+        text_index = load_index_from_storage(storage_context)
+        storage_context = StorageContext.from_defaults(
+            persist_dir="./test_files/textdata"
+        )
+        print("Data in storage")
+        
+        text_docs, chart_docs_dontuse = pdf_processing(pdf_file_path)
 
-    storage_context = StorageContext.from_defaults(
-        persist_dir="./test_files/chartdata"
-    )
-    chart_index = load_index_from_storage(storage_context)
+        chart_docs = SimpleDirectoryReader(
+            input_files=["./test_files/Inflation2024_data_chart.pdf"]
+            ).load_data()
+        
+        
+        for text_doc in text_docs:
+            text_index.insert(text_doc)
 
-    index_loaded = True
-except:
-    index_loaded = False
+        storage_context = StorageContext.from_defaults(
+            persist_dir="./test_files/chartdata"
+        )
+        chart_index = load_index_from_storage(storage_context)
+        for chart_doc in chart_docs:
+            chart_index.insert(chart_doc)
 
-if not index_loaded:
-    # load data
-    # text_docs, chart_docs = pdf_processing(pdf_file)
-    text_docs, chart_docs_dontuse = pdf_processing(pdf_file)
+        index_loaded = True
+    except:
+        print("No data found")
+        index_loaded = False
 
-    chart_docs = SimpleDirectoryReader(
-        input_files=["./test_files/Inflation2024_data_chart.pdf"]
-        ).load_data()
+    if not index_loaded:
+        # load data
+        # text_docs, chart_docs = pdf_processing(pdf_file)
+        text_docs, chart_docs_dontuse = pdf_processing(pdf_file_path)
 
-    # text_docs = SimpleDirectoryReader(
-    #     input_files=["./test_files/Inflation2024_report.pdf"]
-    # ).load_data()
-    # chart_docs = SimpleDirectoryReader(
-    #     input_files=["./test_files/Inflation2024_data_chart.pdf"]
-    # ).load_data()
+        chart_docs = SimpleDirectoryReader(
+            input_files=["./test_files/Inflation2024_data_chart.pdf"]
+            ).load_data()
 
-    # build index
-    text_index = VectorStoreIndex.from_documents(text_docs)
-    chart_index = VectorStoreIndex.from_documents(chart_docs)
+        # text_docs = SimpleDirectoryReader(
+        #     input_files=["./test_files/Inflation2024_report.pdf"]
+        # ).load_data()
+        # chart_docs = SimpleDirectoryReader(
+        #     input_files=["./test_files/Inflation2024_data_chart.pdf"]
+        # ).load_data()
 
-    # persist index
-    text_index.storage_context.persist(persist_dir="./test_files/textdata")
-    chart_index.storage_context.persist(persist_dir="./test_files/chartdata")
+        # build index
+        text_index = VectorStoreIndex.from_documents(text_docs)
+        chart_index = VectorStoreIndex.from_documents(chart_docs)
 
-text_engine = text_index.as_query_engine(similarity_top_k=3)
-chart_engine = chart_index.as_query_engine(similarity_top_k=3)
+        # persist index
+        text_index.storage_context.persist(persist_dir="./test_files/textdata")
+        chart_index.storage_context.persist(persist_dir="./test_files/chartdata")
 
-query_engine_tools = [
-    QueryEngineTool(
-        query_engine=text_engine,
-        metadata=ToolMetadata(
-            name="textdata",
-            description=(
-                "Provides information about text in the document. "
-                "Use a detailed plain text question as input to the tool."
+    text_engine = text_index.as_query_engine(similarity_top_k=3)
+    chart_engine = chart_index.as_query_engine(similarity_top_k=3)
+
+    query_engine_tools = [
+        QueryEngineTool(
+            query_engine=text_engine,
+            metadata=ToolMetadata(
+                name="textdata",
+                description=(
+                    "Provides information about text in the document. "
+                    "Use a detailed plain text question as input to the tool."
+                ),
             ),
         ),
-    ),
-    QueryEngineTool(
-        query_engine=chart_engine,
-        metadata=ToolMetadata(
-            name="chartdata",
-            description=(
-                "Provides information about chart data in the document."
-                "Use a detailed plain text question as input to the tool."
+        QueryEngineTool(
+            query_engine=chart_engine,
+            metadata=ToolMetadata(
+                name="chartdata",
+                description=(
+                    "Provides information about chart data in the document."
+                    "Use a detailed plain text question as input to the tool."
+                ),
             ),
         ),
-    ),
-    bar_chart_tool,
-    line_chart_tool,
-]
+        bar_chart_tool,
+        line_chart_tool,
+    ]
 
-obj_index = ObjectIndex.from_objects(
-    query_engine_tools,
-    index_cls=VectorStoreIndex,
-)
+    obj_index = ObjectIndex.from_objects(
+        query_engine_tools,
+        index_cls=VectorStoreIndex,
+    )
 
-llm = OpenAI(model="gpt-3.5-turbo")
-agent_worker = FunctionCallingAgentWorker.from_tools(
-    tool_retriever=obj_index.as_retriever(similarity_top_k=5),
-    llm=llm,
-    verbose=True,
-    allow_parallel_tool_calls=True,
-)
-agent = AgentRunner(agent_worker)
-
-
+    llm = OpenAI(model="gpt-3.5-turbo")
+    agent_worker = FunctionCallingAgentWorker.from_tools(
+        tool_retriever=obj_index.as_retriever(similarity_top_k=5),
+        llm=llm,
+        verbose=True,
+        allow_parallel_tool_calls=True,
+    )
+    agent = AgentRunner(agent_worker)
 
 
 import datetime

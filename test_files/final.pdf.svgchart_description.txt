@@ -1,0 +1,16 @@
+Title of the chart is "Inflation Percentage by Year".
+ • Chart type is a line graph.
+ • X-axis represents the years from 2015 to 2024.
+ • Y-axis shows the inflation percentage.
+ • The chart illustrates the inflation rates over the last 10 years, emphasizing the significant rise experienced in 2024.
+ • Data points are marked with sky blue circles.
+ • Year 2015 had an inflation rate of 0%.
+ • Year 2016 had an inflation rate of 2%.
+ • Year 2017 had an inflation rate of 4%.
+ • Year 2018 had an inflation rate of 6%.
+ • Year 2019 had an inflation rate of 8%.
+ • Year 2020 had an inflation rate of 10%.
+ • Year 2021 had an inflation rate of 12%.
+ • Year 2022 had an inflation rate of 14%.
+ • Year 2023 had an inflation rate of 16%.
+ • Year 2024 had an inflation rate of 18%.

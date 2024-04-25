@@ -7,16 +7,19 @@ from llama_index.llms.openai import OpenAI
 from llama_index.core.agent import FunctionCallingAgentWorker, AgentRunner
 from PIL import Image
 # Initialize OpenAI model
-llm = OpenAI(model="gpt-3.5-turbo")
 
-# Initialize AgentRunner
-agent_worker = FunctionCallingAgentWorker.from_tools(
-    tool_retriever=obj_index.as_retriever(similarity_top_k=5),
-    llm=llm,
-    verbose=True,
-    allow_parallel_tool_calls=True,
-)
-agent = AgentRunner(agent_worker)
+upload_pdf("./test_files/empty.txt")
+
+# llm = OpenAI(model="gpt-4-turbo")
+
+# # Initialize AgentRunner
+# agent_worker = FunctionCallingAgentWorker.from_tools(
+#     tool_retriever=obj_index.as_retriever(similarity_top_k=5),
+#     llm=llm,
+#     verbose=True,
+#     allow_parallel_tool_calls=True,
+# )
+# agent = AgentRunner(agent_worker)
 
 def display_pdf(file):
     # Opening file from file path
