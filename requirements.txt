@@ -4,3 +4,4 @@ streamlit-pdf-viewer
 matplotlib
 python-dotenv
 watchdog
+pypdf
